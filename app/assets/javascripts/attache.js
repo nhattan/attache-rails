@@ -310,6 +310,18 @@ var AttacheFileInput = exports.AttacheFileInput = React.createClass({
     }
 
     this.setState(this.state);
+
+    if (files[0].type == 'video/mp4' && files[0].size > 1e+8) {
+      $('.post_video').addClass('has-error');
+      if ($('.post_video span.help-block').length == 0) {
+        $('.post_video .help-block').before('<span class="help-block">This file is too large. Please choose a smaller file.</span>');
+      }
+      toastr['error']('This file is too large. Please choose a smaller file.');
+      return
+    }
+    $('.post_video').removeClass('has-error');
+    $('.post_video span.help-block').remove();
+
     // upload the file via CORS
     var that = this;
 
