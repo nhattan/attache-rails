@@ -311,7 +311,7 @@ var AttacheFileInput = exports.AttacheFileInput = React.createClass({
 
     this.setState(this.state);
 
-    if (files[0].type == 'video/mp4' && files[0].size > 1e+8) {
+    if (files[0].size > 1e+8) {
       $('#post_video').val('');
       $('.post_video').addClass('has-error');
       if ($('.post_video span.help-block').length == 0) {
