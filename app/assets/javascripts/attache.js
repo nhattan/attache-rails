@@ -311,17 +311,27 @@ var AttacheFileInput = exports.AttacheFileInput = React.createClass({
 
     this.setState(this.state);
 
+    var upload_content_types = ['video', 'audio', 'photo'];
+
     if (files[0].size > 1e+8) {
-      $('#post_video').val('');
-      $('.post_video').addClass('has-error');
-      if ($('.post_video span.help-block').length == 0) {
-        $('.post_video .help-block').before('<span class="help-block">This file is too large. Please choose a smaller file.</span>');
+      var file_type = files[0].type;
+      var message = 'This file is too large. Please choose a smaller file.';
+
+      if (file_type.match(/video\/\w+/)) {
+        showErrorMessage('video', message);
+      } else if (file_type.match(/audio\/\w+/)) {
+        showErrorMessage('audio', message);
+      } else if (file_type.match(/image\/\w+/)) {
+        showErrorMessage('photo', message);
       }
-      toastr['error']('This file is too large. Please choose a smaller file.');
+
+      toastr['error'](message);
       return
     }
-    $('.post_video').removeClass('has-error');
-    $('.post_video span.help-block').remove();
+
+    for (var i = 0; i < upload_content_types.length; i++) {
+      hideErrorMessage(upload_content_types[i]);
+    }
 
     // upload the file via CORS
     var that = this;
@@ -449,6 +459,25 @@ var AttacheFileInput = exports.AttacheFileInput = React.createClass({
     );
   }
 });
+
+function showErrorMessage(field, message) {
+  if (!field || !message) {
+    return;
+  }
+  $('#post_' + field).val('');
+  $('.post_' + field).addClass('has-error');
+  if ($('.post_' + field + ' span.help-block').length == 0) {
+    $('.post_' + field + ' .help-block').before('<span class="help-block">' + message + '</span>');
+  }
+}
+
+function hideErrorMessage(field) {
+  if (!field) {
+    return;
+  }
+  $('.post_' + field).removeClass('has-error');
+  $('.post_' + field + ' span.help-block').remove();
+}
 
 },{}]},{},[1])(1)
 });
